@@ -1,3 +1,4 @@
+#include <iostream>
 #include "commonfile.hpp"
 
 int main(int argc, const char* argv[]) {
@@ -8,11 +9,8 @@ int main(int argc, const char* argv[]) {
     cev.color = green;
     cev.name = "cool cev";
     cev.memo = "check out this awesome move";
-    
-    Line l;
-    l.int_fields = {106};
-    l.str_fields = {"hello world"};
-    cev.lines.push_back(l);
+
+    cev.a_arith(1600000, 1, 2, div_eq, op_times);
 
     cf.add_common(&cev);
     cf.generate("test.common");

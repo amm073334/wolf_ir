@@ -1,1 +1,5 @@
-.vscode/settings.json
+.vscode/*
+*.pdb
+*.common
+*.obj
+*.exe

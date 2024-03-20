@@ -38,8 +38,7 @@ public:
     /**
      * Append an arithmetic operation to the end of the code.
      * @param dest          Yobidasi of the place to store the result.
-     * @param arg0, arg1    Arguments to perform operation on. Automatically
-     *                      disables yobidasi by default.
+     * @param arg0, arg1    Arguments to perform operation on.
      * @param assign        Assignment operator to use.
      * @param op            Binary operator to use.
     */
@@ -134,6 +133,25 @@ public:
     int32_t return_cself_id = 0;
 
 private:
+
+    /**
+     * Utility
+    */
+
+    /**
+     * Checks if a command can affect the indent level.
+     * @param command   Command ID.
+     * @return          Boolean result.
+    */
+    bool modifies_its_indent(int32_t command);
+    bool increases_next_indent(int32_t command);
+    bool is_codeblock_head(int32_t command);
+
+
+
+    /**
+     * Code generation
+    */
 
     std::ofstream* fs;
 

@@ -9,10 +9,53 @@ CommonEvent::CommonEvent() {
 }
 
 /**
- * Generation
+ * IR modification
 */
 
+bool CommonEvent::modifies_its_indent(int32_t command) {
+    switch (command) {
+        case 401: // conditional branch start
+        case 420: // else branch start
+        case 402: // sentakusi keypress branch
+        case 421: // sentakusi cancel branch
+        case 498: // loop end
+        case 499: // conditional end
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool CommonEvent::increases_next_indent(int32_t command) {
+    switch (command) {
+        case 401: // conditional branch start
+        case 420: // else branch start
+        case 402: // sentakusi keypress branch
+        case 421: // sentakusi cancel branch
+        case 170: // loop head
+        case 179: // loop x times head
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool CommonEvent::is_codeblock_head(int32_t command) {
+    switch (command) {
+        case 102: // sentakusi
+        case 111: // integer conditional
+        case 112: // string conditional
+        case 170: // loop
+        case 179: // loop x times
+            return true;
+        default:
+            return false;
+    }
+}
+
+
 void CommonEvent::append(int32_t command_id, std::vector<int32_t> ifields, std::vector<std::string> sfields) {
+    // handle fields
     Line l;
     l.int_fields.push_back(command_id);
     for (size_t i = 0; i < ifields.size(); i++) {
@@ -20,18 +63,40 @@ void CommonEvent::append(int32_t command_id, std::vector<int32_t> ifields, std::
     }
     l.str_fields = sfields;
     
-    // TODO: switch on command to auto-change indent level
-    l.indent_level = lines.back().indent_level;
+    // handle indent
+    if (lines.empty()) {
+        l.indent_level = 0;
+    } else {
+        char prev_indent = lines.back().indent_level;
+        int32_t prev_command = lines.back().int_fields.at(0);
+        
+        if (modifies_its_indent(command_id)) {
+            if (modifies_its_indent(prev_command) || is_codeblock_head(prev_command)) {
+                l.indent_level = prev_indent;
+            } else {
+                l.indent_level = prev_indent - 1;
+            }
+        } else {
+            if (increases_next_indent(prev_command)) {
+                l.indent_level = prev_indent + 1;
+            } else {
+                l.indent_level = prev_indent;
+            }
+        }    
+    }
     
     lines.push_back(l);
 }
 
 void CommonEvent::a_arith(int32_t dest, int32_t arg0, int32_t arg1, assign_type assign, arith_op op) {
-
+    const int32_t command = 121;
+    append(command, {dest, arg0, arg1, assign | op}, {});
 }
 
+
+
 /**
- * Emission
+ * Code generation
 */
 
 void CommonEvent::emit(int32_t in) {

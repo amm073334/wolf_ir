@@ -4,6 +4,16 @@
 
 #pragma once
 
+enum arith_flag {
+    limit       = 0x01,
+    jissuu      = 0x02,
+    yobanai1    = 0x04,
+    yobanai2    = 0x08,
+    yob_store   = 0x10,
+    yob_arg1    = 0x20,
+    yob_arg2    = 0x40
+};
+
 enum assign_type {
     eq          = 0x000,
     plus_eq     = 0x100,
@@ -14,10 +24,10 @@ enum assign_type {
 };
 
 enum arith_op {
-    plus        = 0x0000,
-    minus       = 0x1000,
-    times       = 0x2000,
-    div         = 0x3000,
-    mod         = 0x4000,
-    bitwise_and = 0x5000
+    op_plus     = 0x0000,
+    op_minus    = 0x1000,
+    op_times    = 0x2000,
+    op_div      = 0x3000,
+    op_mod      = 0x4000,
+    op_bitand   = 0x5000
 };
