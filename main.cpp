@@ -10,7 +10,7 @@ int main(int argc, const char* argv[]) {
     cev.name = "cool cev";
     cev.memo = "check out this awesome move";
 
-    cev.a_arith(1600000, 1, 2, div_eq, op_times);
+    cev.a_arith(1600000, 1, 2, assign_div_eq, op_times);
 
     cf.add_common(&cev);
     cf.generate("test.common");

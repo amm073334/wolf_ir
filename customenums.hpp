@@ -5,22 +5,22 @@
 #pragma once
 
 enum arith_flag {
-    limit       = 0x01,
-    jissuu      = 0x02,
-    yobanai1    = 0x04,
-    yobanai2    = 0x08,
-    yob_store   = 0x10,
-    yob_arg1    = 0x20,
-    yob_arg2    = 0x40
+    af_limit       = 0x01,
+    af_jissuu      = 0x02,
+    af_yobanai1    = 0x04,
+    af_yobanai2    = 0x08,
+    af_yob_store   = 0x10,
+    af_yob_arg1    = 0x20,
+    af_yob_arg2    = 0x40
 };
 
 enum assign_type {
-    eq          = 0x000,
-    plus_eq     = 0x100,
-    minus_eq    = 0x200,
-    times_eq    = 0x300,
-    div_eq      = 0x400,
-    mod_eq      = 0x500
+    assign_eq          = 0x000,
+    assign_plus_eq     = 0x100,
+    assign_minus_eq    = 0x200,
+    assign_times_eq    = 0x300,
+    assign_div_eq      = 0x400,
+    assign_mod_eq      = 0x500
 };
 
 enum arith_op {
