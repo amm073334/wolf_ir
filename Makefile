@@ -1,3 +1,5 @@
+.PHONY: clean
+
 CC = cl
 ARGS = /EHsc
 
