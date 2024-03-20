@@ -8,6 +8,32 @@ CommonEvent::CommonEvent() {
     default_args.fill(0);
 }
 
+/**
+ * Generation
+*/
+
+void CommonEvent::append(int32_t command_id, std::vector<int32_t> ifields, std::vector<std::string> sfields) {
+    Line l;
+    l.int_fields.push_back(command_id);
+    for (size_t i = 0; i < ifields.size(); i++) {
+        l.int_fields.push_back(ifields.at(i));
+    }
+    l.str_fields = sfields;
+    
+    // TODO: switch on command to auto-change indent level
+    l.indent_level = lines.back().indent_level;
+    
+    lines.push_back(l);
+}
+
+void CommonEvent::a_arith(int32_t dest, int32_t arg0, int32_t arg1, assign_type assign, arith_op op) {
+
+}
+
+/**
+ * Emission
+*/
+
 void CommonEvent::emit(int32_t in) {
     fs->write((char*)(&in), sizeof(int32_t));
 }

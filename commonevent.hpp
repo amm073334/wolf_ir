@@ -4,39 +4,8 @@
 #include <vector>
 #include <array>
 #include <utility>
-
-enum exec_type : char {
-    when_called,
-    on_condition,
-    on_parallel_condition,
-    always
-};
-
-enum exec_comp_type : char {
-    greater_than,
-    greater_or_equal,
-    equal,
-    less_or_equal,
-    less_than,
-    not_equal,
-    bitwise_and
-};
-
-enum arg_flag_type : char {
-    none,
-    db,
-    enum_
-};
-
-enum color_type : int32_t {
-    black,
-    red,
-    blue,
-    green,
-    purple,
-    yellow,
-    gray
-};
+#include "commonenums.hpp"
+#include "customenums.hpp"
 
 /**
  * A line of code is represented with a list of integers and
@@ -58,7 +27,27 @@ public:
     CommonEvent();
 
     /**
+     * Append an arbitrary line of code to the end of the common. 
+     * Automatically handles indent level, based on the entered command.
+     * @param command_id    ID of the command.
+     * @param ifields       Vector of integer fields, *not* including the ID.
+     * @param sfields       Vector of string fields.
+    */
+    void append(int32_t command_id, std::vector<int32_t> ifields, std::vector<std::string> sfields);
+
+    /**
+     * Append an arithmetic operation to the end of the code.
+     * @param dest          Yobidasi of the place to store the result.
+     * @param arg0, arg1    Arguments to perform operation on. Automatically
+     *                      disables yobidasi by default.
+     * @param assign        Assignment operator to use.
+     * @param op            Binary operator to use.
+    */
+    void a_arith(int32_t dest, int32_t arg0, int32_t arg1, assign_type assign, arith_op op);
+
+    /**
      * Emits the entire common event object to output.
+     * @param fs    The filestream to write to.
     */
     void emit_common(std::ofstream *fs);
 
@@ -84,20 +73,46 @@ public:
     
     /**
      * Length of the array of strings containing cself names.
-     */    
+    */    
     static const int32_t MAX_NUM_CSELF_NAMES = 100;
     
-    
+    /**
+     * Index of the common in the common list.
+    */
     int32_t id = 0;
+
+    /**
+     * Name of the common.
+    */
     std::string name = "";
+
+    /**
+     * Color of the common.
+    */
     color_type color = black;
+
+    /**
+     * Memo attached to the common.
+    */
     std::string memo = "";
     
+    /**
+     * When to run the common.
+    */
     exec_type exec = when_called;
+
+    /**
+     * If common can trigger automatically, specifies op,
+     * variable to compare, and constant to compare.
+     * If true, then common is triggered automatically.
+    */
     exec_comp_type exec_op = greater_than;
     int32_t cond_yobidasi = 2000000;
     int32_t cond_comp_value = 0;
 
+    /**
+     * Number of args.
+    */
     char num_int_args = 0;
     char num_str_args = 0;
 
@@ -107,8 +122,14 @@ public:
     std::array<int32_t, MAX_NUM_DEFAULTABLE_ARGS> default_args;
     std::array<std::string, MAX_NUM_CSELF_NAMES> cself_names;
     
+    /**
+     * List of code lines.
+    */
     std::vector<Line> lines;
 
+    /**
+     * Name of the return value, and which CSelf to return, from 0-99.
+    */
     std::string return_name = "";
     int32_t return_cself_id = 0;
 
